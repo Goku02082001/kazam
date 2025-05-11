@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/TaskCard.css'; 
-// import { api } from '../constants/api';
+import '../styles/TaskCard.css'
+import { api } from '../api/api';
 import mqtt from 'mqtt';
 export interface Task {
   text: string;
