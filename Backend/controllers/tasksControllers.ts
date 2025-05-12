@@ -8,22 +8,19 @@ dotenv.config();
 const redisKey = process.env.REDIS_KEY as string;
 
 export const addTaskToRedis = async (task: string): Promise<void> => {
+    // await redis.del(redisKey);
   
   const cached = await redis.get(redisKey);
- 
-  
-  const tasks = cached ? JSON.parse(cached) : [];
-  tasks.push({ text: task, timestamp: new Date().toISOString() });
- 
+const taskList = cached ? JSON.parse(cached) : [];
+taskList.push({ text: task, timestamp: new Date().toISOString() });
 
-  if (tasks.length > 50) {
-    
-    await tasks.insertMany(tasks);
-    await redis.del(redisKey);
-    
-  } else {
-    await redis.set(redisKey, JSON.stringify(tasks));
-  }
+if (taskList.length > 5) {
+  await tasks.insertMany(taskList); 
+  await redis.del(redisKey);
+} else {
+  await redis.set(redisKey, JSON.stringify(taskList));
+}
+
 };
 
 export const fetchAllTasks = async (): Promise<{ text: string; timestamp: string }[]> => {
